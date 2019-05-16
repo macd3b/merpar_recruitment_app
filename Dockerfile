@@ -1,6 +1,7 @@
 FROM openjdk:8-jdk-alpine
 ENV app_name "Content analyzer API"
-ARG JAR_FILE
-COPY ${JAR_FILE} app.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+ARG DEPENDENCY=target/dependency
+COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY ${DEPENDENCY}/META-INF /app/META-INF
+COPY ${DEPENDENCY}/BOOT-INF/classes /app
+ENTRYPOINT ["java","-cp","app:app/lib/*","com.merpar.contentanalyzer.ContentAnalyzerApplication"]
